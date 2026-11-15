@@ -1,4 +1,3 @@
-import { Resend } from "resend";
 import { NextResponse } from "next/server";
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -38,17 +37,23 @@ export async function POST(request: Request) {
   }
 
   try {
-    const resend = new Resend(apiKey);
-    const { error } = await resend.emails.send({
-      from,
-      to: "sreyasudheesh14@gmail.com",
-      replyTo: email.trim(),
-      subject: `Portfolio message from ${name.trim()}`,
-      text: `Name: ${name.trim()}\nEmail: ${email.trim()}\n\n${message.trim()}`,
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from,
+        to: ["sreyasudheesh14@gmail.com"],
+        reply_to: email.trim(),
+        subject: `Portfolio message from ${name.trim()}`,
+        text: `Name: ${name.trim()}\nEmail: ${email.trim()}\n\n${message.trim()}`,
+      }),
     });
 
-    if (error) {
-      console.error("Resend rejected a portfolio contact message:", error.message);
+    if (!response.ok) {
+      console.error("Resend rejected a portfolio contact message with status:", response.status);
       return NextResponse.json({ error: "Your message could not be sent right now. Please try again later." }, { status: 502 });
     }
 

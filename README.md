@@ -19,7 +19,7 @@ Open [http://localhost:3000](http://localhost:3000). The site works without mail
 
 ## Contact email setup
 
-The contact form submits to `POST /api/contact`. The server validates the name, email, and message, then sends the message to `sreyasudheesh14@gmail.com` using Resend.
+The contact form submits to `POST /api/contact`. The server validates the name, email, and message, then sends the message to `sreyasudheesh14@gmail.com` through the Resend API.
 
 1. Create a Resend account and verify a sender domain/address.
 2. Set `RESEND_API_KEY` and `CONTACT_FROM_EMAIL` in `.env.local`. `CONTACT_FROM_EMAIL` must be a sender address verified with Resend.
